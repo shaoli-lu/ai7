@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How LLMs Learned to Reason</title>
+
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="sing.css">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="205x154" href="favicon.png">
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+</head>
+<body>
+
+       
+<div class="audio-player">
+  <audio id="myAudio" controls>
+    <source src="data.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="controls">
+    <button type="button" onclick="rewindAudio()">⏪ 10s</button>
+    <button type="button" onclick="fastForwardAudio()">⏩ 10s</button>
+  </div>
+</div>
+
+  <h2>Overview</h2>
+  <p>
+    This lecture, presented by <strong>Denny Zhou</strong> from <em>Google DeepMind</em>, 
+    explores the concept of <strong>Large Language Model (LLM) reasoning</strong>, defining it as 
+    the intermediate steps generated between an input and output.
+  </p>
+
+  <p>
+    Zhou introduces <strong>Chain of Thought (CoT) prompting</strong> and 
+    <strong>self-consistency</strong>, highlighting how these techniques allow pre-trained LLMs to reason by shaping 
+    their output distributions to favor step-by-step solutions rather than simply generating final answers.
+  </p>
+
+  <p>
+    The discussion also covers the evolution from 
+    <strong>Supervised Fine-Tuning (SFT)</strong> to 
+    <strong>Reinforced Fine-Tuning (RLFT)</strong>, emphasizing that self-generated, 
+    verifiable data can outperform human-annotated data for training.
+  </p>
+
+  <p>
+    Finally, Zhou illustrates the power of <strong>aggregation</strong> and 
+    <strong>retrieval-augmented reasoning</strong>, suggesting that future 
+    advancements lie in tasks beyond automatic verifiability and the development of 
+    practical, real-world LLM applications.
+  </p>
+
+  <h2>Main Topics in LLM Reasoning</h2>
+  <p>
+    Here are some main and interesting topics discussed regarding Large Language Model (LLM) reasoning, 
+    along with examples:
+  </p>
+
+  <h3>Defining LLM Reasoning</h3>
+  <p>
+    For the purpose of the talk, reasoning in LLMs specifically refers to 
+    <strong>intermediate tokens between input and output</strong>, also known as intermediate steps.
+    This concept isn't new; in 2017, Demis Hassabis published a paper on using intermediate tokens 
+    to solve math problems.
+  </p>
+  <p><strong>Example:</strong> Concatenating the last letters in “artificial intelligence.”  
+    Instead of directly outputting “LE,” the model reasons:  
+    “The last letter of artificial is L, the last letter of intelligence is E, concatenating L and E results in LE.”</p>
+
+  <h3>Theoretical Basis for Intermediate Tokens</h3>
+  <p>
+    Theoretical work suggests that for any problem solvable by Boolean circuits of size T, 
+    constant-size transformer models can solve it by generating O(T) intermediate tokens. 
+    Directly generating final answers would either require immense depth or be impossible.
+  </p>
+
+  <h3>Pre-trained Models Can Reason (Decoding Issue)</h3>
+  <p>
+    Pre-trained models are already capable of reasoning; the difficulty often lies in 
+    the <strong>decoding process</strong>. Greedy decoding can hide reasoning ability.
+  </p>
+  <p><strong>Example:</strong> A question about apples might be answered incorrectly as “five apples” with greedy decoding, 
+    though other candidates reveal reasoning:  
+    “I have 3 apples, my dad has 5… 3 + 5 = 8,” which is correct.</p>
+
+  <h3>Chain of Thought (CoT) Decoding</h3>
+  <ul>
+    <li>Goes beyond greedy decoding—checks multiple generation candidates.</li>
+    <li>Chooses candidates with the highest confidence in the final answer.</li>
+  </ul>
+
+  <h3>Prompting Approaches</h3>
+  <ul>
+    <li><strong>Chain of Thought (CoT) Prompting:</strong> Provide a worked step-by-step example to encourage reasoning.</li>
+    <li><strong>“Let's think step by step”:</strong> A lighter alternative, less effective than few-shot prompting.</li>
+  </ul>
+
+  <h3>Supervised Fine-Tuning (SFT)</h3>
+  <p>
+    Uses problems with human-annotated reasoning steps.  
+    <strong>Example:</strong> Math problems with solutions collected in datasets like GSM8K.  
+    <strong>Pitfall:</strong> Limited generalization—human annotations may have mistakes.
+  </p>
+
+  <h3>Reinforced Fine-Tuning (Io Fine-Tuning / Self-Improvement)</h3>
+  <ul>
+    <li>Model generates multiple reasoning paths.</li>
+    <li>A verifier checks the correctness of the final answers.</li>
+    <li>Verified reasoning paths are looped back to fine-tune the model.</li>
+  </ul>
+  <p><strong>Advantage:</strong> Model-generated data can outperform human data—cleaner structure, correctness-focused.</p>
+  <p><strong>Scaling:</strong> Scaling the length of the CoT (output steps) is often more important than model size.</p>
+
+  <h3>LLM Reasoning vs. Classical AI</h3>
+  <p>
+    LLMs differ from classical AI search—they reason through sequential token prediction, 
+    sometimes mimicking “human-like” thinking.  
+    <strong>Example:</strong> Solving the “make 2025 from 1–10” problem by recognizing 2025 = 45² and breaking 
+    it into intermediate goals.
+  </p>
+
+  <h3>Limitations of Io Fine-Tuning</h3>
+  <p>
+    Works best for <strong>automatically verifiable tasks</strong>, like math or competitive programming.  
+    Less effective for creative writing or open-ended programming tasks.
+  </p>
+
+  <h3>Self-Consistency (Aggregation)</h3>
+  <p>
+    Instead of relying on the highest-probability token, self-consistency aggregates multiple reasoning outputs.
+  </p>
+  <p><strong>Process:</strong> Sample many responses → take the most common final answer.</p>
+  <p><strong>Example:</strong> If outputs are 18, 26, 18, the answer becomes 18.</p>
+  <p>This reduces reasoning variability and boosts accuracy.</p>
+
+  <h3>Universal Self-Consistency</h3>
+  <p>
+    Extends consistency to problems without single-token answers, by finding overlapping consensus across responses.  
+    <strong>Example:</strong> If answers differ but share common elements (Japan, China, India appear in all), 
+    the model aggregates these.
+  </p>
+
+  <h3>Retrieval in Reasoning</h3>
+  <p>
+    Retrieval strengthens reasoning by prompting models with relevant past problems or principles:
+  </p>
+  <ul>
+    <li><strong>Analogical Reasoning:</strong> Recall a related problem to apply its method.</li>
+    <li><strong>Step-Back Prompting:</strong> Generalize into a simpler abstract principle before solving the instance.</li>
+  </ul>
+
+  <h3>Key Takeaways</h3>
+  <ul>
+    <li>LLM reasoning is always better than no reasoning.</li>
+    <li>Reinforced fine-tuning (Io) is generally better than SFT.</li>
+    <li>Aggregating answers (self-consistency) improves reliability but is costlier.</li>
+    <li>Retrieval + reasoning outperforms reasoning alone.</li>
+    <li>AI research truths are often simpler than they first appear.</li>
+  </ul>
+  
+    <div style="text-align: center; margin: 40px 0 0 0;">
+        <a href="https://youtu.be/ebnX5Ur1hBk" target="_blank" rel="noopener">
+            Watch the original Stanford CS25: V5 I Large Language Model Reasoning, Denny Zhou of Google Deepmind video on YouTube
+        </a>
+    </div>
+
+
+</body>
+</html>
+
+

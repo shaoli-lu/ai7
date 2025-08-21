@@ -1,0 +1,81 @@
+body {
+    background-color: cadetblue;
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    font-size: 22px;
+    line-height: 1.7;
+    color: #222;
+    padding: 16px;
+    margin: 0;
+}
+
+h1, h2 {
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    line-height: 1.2;
+    font-weight: bold;
+    color: #111;
+    margin-top: 28px;
+    margin-bottom: 12px;
+}
+
+p, ul, ol {
+    margin-bottom: 20px;
+    margin-top: 6px;
+}
+
+ul, ol {
+    padding-left: 30px;
+}
+
+.audio-player {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.audio-player .controls button {
+  background-color: #618685;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin: 0 8px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.audio-player .controls button:hover {
+  background-color: #476b6d;
+}
+
+@media (max-width: 600px) {
+    audio {
+        width: 98%;
+        max-width: 400px; /* allow even larger max width on mobile */
+        transform: scale(1.05);
+    }
+}
+
+
+figcaption {
+    color: blueviolet;
+    font-size: 22px;
+    margin: 4px 0px 8px 5px;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    body {
+        font-size: 18px;
+        padding: 8px;
+    }
+    h1, h2 {
+        font-size: 1.3em;
+    }
+    audio {
+        width: 98%;
+        max-width: 350px;
+    }
+    figcaption {
+        font-size: 18px;
+    }
+}
